@@ -1,29 +1,56 @@
+using System;
 using System.Globalization;
 
 class Program
 {
-    // Отсортируйте массив студентов по имени (Name) в алфавитном порядке, прямо в этом массиве.
-    // Сравнение строк: string.Compare(a.Name, b.Name) < 0 — значит a стоит раньше b.
-    // Напишите сортировку сами (например, пузырьком), меняя местами элементы массива.
+    // 1. Сортировка массива студентов по имени пузырьком (in-place)
     static void SortByName(Student[] students)
     {
-        // TODO: напишите решение здесь
+        for (int i = 0; i < students.Length - 1; i++)
+        {
+            for (int j = 0; j < students.Length - 1 - i; j++)
+            {
+                if (string.Compare(students[j].Name, students[j + 1].Name) > 0)
+                {
+                    Student temp = students[j];
+                    students[j] = students[j + 1];
+                    students[j + 1] = temp;
+                }
+            }
+        }
     }
 
-    // Перенесите сюда свой метод FindHigh из Задания 8:
-    // новый массив из студентов, у которых есть оценки и средний балл >= minAverage.
+    // 2. Метод из Задания 8: новый массив со студентами, у которых есть оценки и средний балл >= minAverage
     static Student[] FindHigh(Student[] group, double minAverage)
     {
-        // TODO: напишите решение здесь
-        return new Student[0];
+        int count = 0;
+        foreach (Student s in group)
+        {
+            if (s.HasScores && s.Average >= minAverage)
+            {
+                count++;
+            }
+        }
+
+        Student[] result = new Student[count];
+        int index = 0;
+        foreach (Student s in group)
+        {
+            if (s.HasScores && s.Average >= minAverage)
+            {
+                result[index] = s;
+                index++;
+            }
+        }
+        return result;
     }
 
-    // Верните студентов с высоким баллом, отсортированных по имени.
-    // Используйте FindHigh и SortByName. Исходный массив group менять нельзя.
+    // 3. Возвращает студентов с высоким баллом, отсортированных по имени (исходный group не меняется)
     static Student[] HighSortedByName(Student[] group, double minAverage)
     {
-        // TODO: напишите решение здесь
-        return new Student[0];
+        Student[] result = FindHigh(group, minAverage);
+        SortByName(result);
+        return result;
     }
 
     static void Main()
